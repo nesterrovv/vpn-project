@@ -2,6 +2,7 @@ package com.nesterrovv.vpn.authentication.service;
 
 import com.nesterrovv.vpn.VpnApplication;
 import com.nesterrovv.vpn.authentication.dto.UserCreateDto;
+import com.nesterrovv.vpn.authentication.entity.Role;
 import com.nesterrovv.vpn.authentication.entity.User;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ public class UserServiceTest {
 
     @Test
     void getTest() {
-        User expected = new User(1, "first", "ras", "first@mail.ru");
+        User expected = new User(1, "first", "ras", "first@mail.ru", Role.USER);
         User actual = userService.findById(1);
         System.out.println(actual);
         assertEquals(expected, actual);
