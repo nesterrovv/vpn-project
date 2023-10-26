@@ -1,19 +1,20 @@
 package com.nesterrovv.vpn.authentication.mapper;
 
 import com.nesterrovv.vpn.authentication.dto.UserCreateDto;
+import com.nesterrovv.vpn.authentication.entity.Role;
 import com.nesterrovv.vpn.authentication.entity.User;
-import org.modelmapper.ModelMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class UserCreateMapper {
-    public UserCreateDto entityToDto(User user) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(user, UserCreateDto.class);
-    }
 
-    public User dtoToEntity(UserCreateDto userCreateDto) {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(userCreateDto, User.class);
+    public User dtoToEntity(UserCreateDto dto) {
+        return User.builder()
+            .username(dto.getUsername())
+            .password(dto.getPassword())
+            .email(dto.getEmail())
+            .role(Role.USER).build();
     }
 }
