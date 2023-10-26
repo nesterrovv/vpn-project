@@ -1,6 +1,8 @@
 package com.nesterrovv.vpn.authentication.service;
 
+import com.nesterrovv.vpn.authentication.dto.AuthenticationResponse;
 import com.nesterrovv.vpn.authentication.dto.UserCreateDto;
+import com.nesterrovv.vpn.authentication.dto.UserLoginDto;
 import com.nesterrovv.vpn.authentication.entity.User;
 import com.nesterrovv.vpn.authentication.mapper.UserCreateMapper;
 import com.nesterrovv.vpn.authentication.repository.UserRepository;
@@ -18,8 +20,19 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserCreateMapper userCreateMapper;
 
-    public void create(UserCreateDto userCreateDto) {
-        userRepository.save(userCreateMapper.dtoToEntity(userCreateDto));
+    public AuthenticationResponse register(UserCreateDto dto) {
+        User user = userCreateMapper.dtoToEntity(dto);
+        userRepository.save(user);
+        return new AuthenticationResponse("Ok", "a41h43");
+    }
+
+    public AuthenticationResponse login(UserLoginDto dto) {
+        Optional<User> user = userRepository.findByUsername(dto.getUsername());
+        if (user.isPresent() && user.get().getPassword().equals(dto.getPassword())) {
+            return new AuthenticationResponse("Ok", "a41h43");
+        } else {
+            return new AuthenticationResponse("Bad");
+        }
     }
 
     public List<User> listAll() {
