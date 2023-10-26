@@ -1,13 +1,20 @@
 package com.nesterrovv.vpn.authentication.dto;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-@Value
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@ToString
 public class UserCreateDto {
 
-    String username;
+    private String username;
 
-    String password;
+    private String password;
 
-    String email;
+    private String email;
+
 }
