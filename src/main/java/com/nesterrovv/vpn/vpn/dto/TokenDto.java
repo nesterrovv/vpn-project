@@ -1,10 +1,40 @@
 package com.nesterrovv.vpn.vpn.dto;
 
-import lombok.Value;
+import java.util.Objects;
 
-@Value
 public class TokenDto {
 
-    String token;
+    private String token;
+
+    public TokenDto() {}
+
+    public TokenDto(String token) {
+        this.token = token;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        TokenDto tokenDto = (TokenDto) o;
+        return Objects.equals(token, tokenDto.token);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(token);
+    }
 
 }
