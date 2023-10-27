@@ -1,8 +1,8 @@
 package com.nesterrovv.vpn.authentication.service;
 
 import com.nesterrovv.vpn.authentication.dto.AuthenticationResponse;
-import com.nesterrovv.vpn.authentication.dto.UserCreateDto;
-import com.nesterrovv.vpn.authentication.dto.UserLoginDto;
+import com.nesterrovv.vpn.authentication.dto.RegisterDto;
+import com.nesterrovv.vpn.authentication.dto.LoginDto;
 import com.nesterrovv.vpn.authentication.entity.User;
 import com.nesterrovv.vpn.authentication.mapper.UserCreateMapper;
 import com.nesterrovv.vpn.authentication.repository.UserRepository;
@@ -20,13 +20,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserCreateMapper userCreateMapper;
 
-    public AuthenticationResponse register(UserCreateDto dto) {
+    public AuthenticationResponse register(RegisterDto dto) {
         User user = userCreateMapper.dtoToEntity(dto);
         userRepository.save(user);
         return new AuthenticationResponse("Ok", "a41h43");
     }
 
-    public AuthenticationResponse login(UserLoginDto dto) {
+    public AuthenticationResponse login(LoginDto dto) {
         Optional<User> user = userRepository.findByUsername(dto.getUsername());
         if (user.isPresent() && user.get().getPassword().equals(dto.getPassword())) {
             return new AuthenticationResponse("Ok", "a41h43");
@@ -36,7 +36,7 @@ public class UserService {
     }
 
     public List<User> listAll() {
-        return (List<User>) userRepository.findAll();
+        return userRepository.findAll();
     }
 
     public Optional<User> findByUsername(String username) {

@@ -1,7 +1,7 @@
 package com.nesterrovv.vpn.authentication.service;
 
 import com.nesterrovv.vpn.VpnApplication;
-import com.nesterrovv.vpn.authentication.dto.UserCreateDto;
+import com.nesterrovv.vpn.authentication.dto.RegisterDto;
 import com.nesterrovv.vpn.authentication.entity.Role;
 import com.nesterrovv.vpn.authentication.entity.User;
 import java.util.List;
@@ -36,7 +36,7 @@ public class UserServiceTest {
     @Test
     void createTest() {
         int startValue = userService.listAll().size();
-        userService.create(new UserCreateDto("test", "new", "test@mail.ru"));
+        userService.register(new RegisterDto("test", "new", "test@mail.ru"));
         assertEquals(startValue + 1, userService.listAll().size());
     }
 
