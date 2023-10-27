@@ -52,16 +52,4 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public User findById(Integer id) {
-        return userRepository.findById(id).get();
-    }
-
-    public boolean delete(String username) {
-        return userRepository.findByUsername(username)
-            .map(entity -> {
-                userRepository.delete(entity);
-                return true;
-            })
-            .orElse(false);
-    }
 }
