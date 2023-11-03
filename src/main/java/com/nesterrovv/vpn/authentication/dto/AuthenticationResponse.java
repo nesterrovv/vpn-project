@@ -17,4 +17,5 @@ public class AuthenticationResponse {
     public AuthenticationResponse(String responseStatus) {
         this.responseStatus = responseStatus;
     }
+
 }

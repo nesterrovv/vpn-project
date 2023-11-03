@@ -24,4 +24,5 @@ public class AuthenticationController {
     public AuthenticationResponse register(@RequestBody LoginDto request) {
         return userService.login(request);
     }
+
 }

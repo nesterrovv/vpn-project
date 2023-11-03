@@ -18,5 +18,5 @@ public class UserConfiguration implements UserDetailsService {
         return userRepository.findByUsername(username)
             .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + username));
     }
-}
 
+}
