@@ -1,8 +1,8 @@
 package com.nesterrovv.vpn.authentication.controller;
 
 import com.nesterrovv.vpn.authentication.dto.AuthenticationResponse;
-import com.nesterrovv.vpn.authentication.dto.RegisterDto;
 import com.nesterrovv.vpn.authentication.dto.LoginDto;
+import com.nesterrovv.vpn.authentication.dto.RegisterDto;
 import com.nesterrovv.vpn.authentication.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
