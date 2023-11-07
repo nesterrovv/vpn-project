@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TokenMapperTest {
+class TokenMapperTest {
 
     @Test
-    public void testEntityToDto() {
+    void testEntityToDto() {
         // Arrange
         Token token = new Token();
         token.setToken("testToken");
@@ -21,7 +21,7 @@ public class TokenMapperTest {
     }
 
     @Test
-    public void testDtoToEntity() {
+     void testDtoToEntity() {
         // Arrange
         TokenDto tokenDto = new TokenDto("testToken");
         TokenMapper tokenMapper = new TokenMapper();

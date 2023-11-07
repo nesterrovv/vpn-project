@@ -5,17 +5,17 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-public class ModelMapperConfigurationTest {
+class ModelMapperConfigurationTest {
 
     private AnnotationConfigApplicationContext context;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         context = new AnnotationConfigApplicationContext(ModelMapperConfiguration.class);
     }
 
     @Test
-    public void testModelMapperBeanCreation() {
+    void testModelMapperBeanCreation() {
         // Arrange
         ModelMapperConfiguration modelMapperConfiguration = context.getBean(ModelMapperConfiguration.class);
         // Act

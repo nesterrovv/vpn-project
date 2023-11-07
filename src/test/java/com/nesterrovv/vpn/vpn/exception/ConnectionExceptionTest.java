@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ConnectionExceptionTest {
+class ConnectionExceptionTest {
 
     @Test
-    public void testConnectionExceptionMessage() {
+    void testConnectionExceptionMessage() {
         // Arrange
         String errorMessage = "Test Connection Exception Message";
         // Act

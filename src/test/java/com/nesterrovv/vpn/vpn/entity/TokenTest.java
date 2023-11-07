@@ -5,13 +5,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TokenTest {
+class TokenTest {
 
     private Token token1;
     private Token token2;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         token1 = new Token();
         token1.setId(1L);
         token1.setToken("token1");
@@ -22,7 +22,7 @@ public class TokenTest {
     }
 
     @Test
-    public void testEquals() {
+    void testEquals() {
         // Arrange
         Token sameToken = new Token();
         sameToken.setId(1L);
@@ -36,7 +36,7 @@ public class TokenTest {
     }
 
     @Test
-    public void testHashCode() {
+     void testHashCode() {
         // Arrange
         Token sameToken = new Token();
         sameToken.setId(1L);

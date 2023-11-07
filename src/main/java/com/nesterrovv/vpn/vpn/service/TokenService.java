@@ -34,10 +34,10 @@ public class TokenService {
             String url = System.getenv("OUTLINE_API_URL");
             String postfix = System.getenv("POSTFIX");
             String curlCommand = "curl --insecure -X POST " + url + postfix;
-            ProcessBuilder processBuilder = new ProcessBuilder(curlCommand.split(" "));
+            var processBuilder = new ProcessBuilder(curlCommand.split(" "));
             processBuilder.redirectErrorStream(true);
-            Process process = processBuilder.start();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            var process = processBuilder.start();
+            var reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String accessUrl = null;
             String line;
             while ((line = reader.readLine()) != null) {

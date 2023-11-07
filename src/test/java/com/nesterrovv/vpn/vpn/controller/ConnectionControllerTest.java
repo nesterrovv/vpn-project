@@ -12,7 +12,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class ConnectionControllerTest {
+class ConnectionControllerTest {
 
     private ConnectionController connectionController;
 
@@ -20,14 +20,14 @@ public class ConnectionControllerTest {
     private TokenService tokenService;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         // Инициализация mock объектов и контроллера
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         connectionController = new ConnectionController(tokenService);
     }
 
     @Test
-    public void testFindTokenById() {
+    void testFindTokenById() {
         // Arrange
         Long tokenId = 1L;
         Token expectedToken = new Token();
@@ -39,7 +39,7 @@ public class ConnectionControllerTest {
     }
 
     @Test
-    public void testGenerateToken() {
+    void testGenerateToken() {
         // Arrange
         Token generatedToken = new Token();
         Mockito.when(tokenService.generateToken()).thenReturn(generatedToken);
@@ -51,7 +51,7 @@ public class ConnectionControllerTest {
     }
 
     @Test
-    public void testDeleteToken() {
+    void testDeleteToken() {
         // Arrange
         Long tokenId = 1L;
         // Act

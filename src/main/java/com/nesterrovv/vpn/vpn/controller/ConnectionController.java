@@ -2,7 +2,6 @@ package com.nesterrovv.vpn.vpn.controller;
 
 import com.nesterrovv.vpn.vpn.dto.TokenDto;
 import com.nesterrovv.vpn.vpn.entity.Token;
-import com.nesterrovv.vpn.vpn.mapper.TokenMapper;
 import com.nesterrovv.vpn.vpn.service.TokenService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,7 @@ public class ConnectionController {
     @PostMapping("/generate")
     public TokenDto generateToken() {
         Token generatedToken = tokenService.generateToken();
-        return new TokenMapper().entityToDto(generatedToken);
+        return new TokenDto(generatedToken.getToken());
     }
 
     @DeleteMapping("/delete/{id}")
