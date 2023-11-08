@@ -1,10 +1,10 @@
 package com.nesterrovv.vpn.authentication.controller;
 
-import com.nesterrovv.vpn.authentication.dto.AuthenticationResponse;
 import com.nesterrovv.vpn.authentication.dto.LoginDto;
 import com.nesterrovv.vpn.authentication.dto.RegisterDto;
-import com.nesterrovv.vpn.authentication.service.UserService;
+import com.nesterrovv.vpn.authentication.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    private final UserService userService;
+    private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public AuthenticationResponse register(@RequestBody RegisterDto request) {
-        return userService.register(request);
+    public ResponseEntity<?> register(@RequestBody RegisterDto request)   {
+        return authenticationService.register(request);
     }
 
     @PostMapping("/login")
-    public AuthenticationResponse register(@RequestBody LoginDto request) {
-        return userService.login(request);
+    public ResponseEntity<?> login(@RequestBody LoginDto request) {
+        return authenticationService.login(request);
     }
 
 }
