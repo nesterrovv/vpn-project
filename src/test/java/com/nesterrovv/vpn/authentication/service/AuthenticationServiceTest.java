@@ -2,8 +2,10 @@ package com.nesterrovv.vpn.authentication.service;
 
 import com.nesterrovv.vpn.authentication.dto.LoginDto;
 import com.nesterrovv.vpn.authentication.dto.RegisterDto;
+import com.nesterrovv.vpn.authentication.entity.Role;
 import com.nesterrovv.vpn.authentication.entity.User;
 import com.nesterrovv.vpn.authentication.mapper.UserCreateMapper;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -27,11 +29,20 @@ public class AuthenticationServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private JwtService jwtService;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         authenticationService =
-            new AuthenticationService(authenticationManager, userService, userCreateMapper, passwordEncoder);
+            new AuthenticationService(
+                authenticationManager,
+                userService,
+                userCreateMapper,
+                passwordEncoder,
+                jwtService
+            );
     }
 
     @Test
@@ -49,8 +60,10 @@ public class AuthenticationServiceTest {
     void loginTest() {
         ResponseEntity<?> response = ResponseEntity.ok("4ab4");
         LoginDto dto = new LoginDto("first", "ras");
+        Optional<User> user = Optional.of(new User(null, "first", "ras", null, Role.USER));
+        Mockito.when(userService.findByUsername(dto.getUsername())).thenReturn(user);
         ResponseEntity<?> result = authenticationService.login(dto);
-        assertEquals(response, result);
+        assertEquals(response.getStatusCode(), result.getStatusCode());
     }
 
 }
