@@ -1,10 +1,12 @@
 package com.nesterrovv.vpn.authentication.service;
 
+import com.nesterrovv.vpn.authentication.dto.JwtToken;
 import com.nesterrovv.vpn.authentication.dto.LoginDto;
 import com.nesterrovv.vpn.authentication.dto.RegisterDto;
 import com.nesterrovv.vpn.authentication.entity.User;
 import com.nesterrovv.vpn.authentication.mapper.UserCreateMapper;
 import jakarta.transaction.Transactional;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +25,7 @@ public class AuthenticationService {
     private final UserService userService;
     private final UserCreateMapper userCreateMapper;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     public ResponseEntity<?> register(RegisterDto dto) {
         User user = userCreateMapper.dtoToEntity(dto);
@@ -38,7 +41,12 @@ public class AuthenticationService {
                 dto.getPassword()
             ));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return ResponseEntity.ok("4ab4");
+        Optional<User> user = userService.findByUsername(dto.getUsername());
+        if (user.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        JwtToken jwtToken = new JwtToken(jwtService.generateToken(user.get()));
+        return ResponseEntity.ok(jwtToken);
     }
 
 }
