@@ -25,6 +25,7 @@ public class JwtService {
     @Value("${jwt.lifetime}")
     public Duration jwtLifeTime;
 
+    @SuppressWarnings("MultipleStringLiterals")
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         var rolesList = userDetails.getAuthorities().stream()
@@ -50,6 +51,7 @@ public class JwtService {
             .getBody();
     }
 
+    @SuppressWarnings("MultipleStringLiterals")
     public List<String> getRoles(String token) {
         return getAllClaimsFromToken(token).get("roles", List.class);
     }
