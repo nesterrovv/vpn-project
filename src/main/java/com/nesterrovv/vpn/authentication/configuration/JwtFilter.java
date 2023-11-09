@@ -1,6 +1,8 @@
 package com.nesterrovv.vpn.authentication.configuration;
 
 import com.nesterrovv.vpn.authentication.service.JwtService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,7 +25,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @SuppressWarnings("MagicNumber")
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal(
+        HttpServletRequest request,
+        @NotNull HttpServletResponse response,
+        @NotNull FilterChain filterChain
+    )
         throws ServletException, IOException {
         var authHeader = request.getHeader("Authorization");
         String username = null;
@@ -30,7 +37,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
-            username = jwtService.getUsername(jwt);
+            try {
+                username = jwtService.getUsername(jwt);
+            } catch (ExpiredJwtException e) {
+//                log.error("Jwt token was expired");  //TODO add slf4j
+            } catch (MalformedJwtException e) {
+//                log.error("Jwt token is incorrect");
+            }
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -41,7 +54,7 @@ public class JwtFilter extends OncePerRequestFilter {
             );
             SecurityContextHolder.getContext().setAuthentication(token);
         }
-
         filterChain.doFilter(request, response);
     }
+
 }

@@ -4,15 +4,18 @@ import com.nesterrovv.vpn.authentication.dto.JwtToken;
 import com.nesterrovv.vpn.authentication.dto.LoginDto;
 import com.nesterrovv.vpn.authentication.dto.RegisterDto;
 import com.nesterrovv.vpn.authentication.entity.User;
+import com.nesterrovv.vpn.authentication.exception.EmailAlreadyExistsException;
+import com.nesterrovv.vpn.authentication.exception.UsernameAlreadyExistsException;
+import com.nesterrovv.vpn.authentication.exception.UsernameOrPasswordException;
 import com.nesterrovv.vpn.authentication.mapper.UserCreateMapper;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,23 +32,29 @@ public class AuthenticationService {
 
     public ResponseEntity<?> register(RegisterDto dto) {
         User user = userCreateMapper.dtoToEntity(dto);
+        if (Optional.ofNullable(userService.findByUsername(user.getUsername())).isPresent()) {
+            return new ResponseEntity<>(new UsernameAlreadyExistsException().getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        if (Optional.ofNullable(userService.findByEmail(user.getEmail())).isPresent()) {
+            return new ResponseEntity<>(new EmailAlreadyExistsException().getMessage(), HttpStatus.BAD_REQUEST);
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User createdUser = userService.createUser(user);
         return ResponseEntity.ok(createdUser.getUsername());
     }
 
     public ResponseEntity<?> login(LoginDto dto) {
-        Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                dto.getUsername(),
-                dto.getPassword()
-            ));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        Optional<User> user = userService.findByUsername(dto.getUsername());
-        if (user.isEmpty()) {
-            return ResponseEntity.badRequest().build();
+        try {
+            authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                    dto.getUsername(),
+                    dto.getPassword()
+                ));
+        } catch (BadCredentialsException e) {
+            return new ResponseEntity<>(new UsernameOrPasswordException().getMessage(), HttpStatus.BAD_REQUEST);
         }
-        JwtToken jwtToken = new JwtToken(jwtService.generateToken(user.get()));
+        User user = userService.findByUsername(dto.getUsername());
+        JwtToken jwtToken = new JwtToken(jwtService.generateToken(user));
         return ResponseEntity.ok(jwtToken);
     }
 
