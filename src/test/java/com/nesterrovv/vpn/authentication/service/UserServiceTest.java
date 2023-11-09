@@ -42,8 +42,8 @@ class UserServiceTest {
     @Test
     void findByUsernameTest() {
         User user = new User(1, "first", "ras", "first@mail.ru", Role.USER);
-        Mockito.when(userRepository.findByUsername("first")).thenReturn(Optional.of(user));
-        Optional<User> result = userService.findByUsername("first");
+        Mockito.when(userRepository.findByUsername("first")).thenReturn(user);
+        Optional<User> result = Optional.ofNullable(userService.findByUsername("first"));
         assertTrue(result.isPresent());
         assertEquals(user, result.get());
     }

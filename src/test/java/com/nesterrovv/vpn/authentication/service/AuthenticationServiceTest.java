@@ -5,7 +5,6 @@ import com.nesterrovv.vpn.authentication.dto.RegisterDto;
 import com.nesterrovv.vpn.authentication.entity.Role;
 import com.nesterrovv.vpn.authentication.entity.User;
 import com.nesterrovv.vpn.authentication.mapper.UserCreateMapper;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -59,7 +58,7 @@ public class AuthenticationServiceTest {
     void loginTest() {
         ResponseEntity<?> response = ResponseEntity.ok("4ab4");
         LoginDto dto = new LoginDto("first", "ras");
-        Optional<User> user = Optional.of(new User(null, "first", "ras", null, Role.USER));
+        User user = new User(null, "first", "ras", null, Role.USER);
         Mockito.when(userService.findByUsername(dto.getUsername())).thenReturn(user);
         ResponseEntity<?> result = authenticationService.login(dto);
         assertEquals(response.getStatusCode(), result.getStatusCode());
