@@ -48,4 +48,12 @@ class UserServiceTest {
         assertEquals(user, result.get());
     }
 
+    @Test
+    void createUser() {
+        User user = new User(1, "first", "ras", "first@mail.ru", Role.USER);
+        Mockito.when(userRepository.save(user)).thenReturn(user);
+        User result = userService.createUser(user);
+        assertEquals(user, result);
+    }
+
 }

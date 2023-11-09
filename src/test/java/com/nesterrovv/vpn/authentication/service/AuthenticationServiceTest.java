@@ -28,7 +28,6 @@ public class AuthenticationServiceTest {
     private UserCreateMapper userCreateMapper;
     @Mock
     private PasswordEncoder passwordEncoder;
-
     @Mock
     private JwtService jwtService;
 
