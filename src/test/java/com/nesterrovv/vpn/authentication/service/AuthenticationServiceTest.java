@@ -21,7 +21,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AuthenticationServiceTest {
+class AuthenticationServiceTest {
 
     private AuthenticationService authenticationService;
 
@@ -94,7 +94,7 @@ public class AuthenticationServiceTest {
     }
 
     @Test
-    void loginBadCredentialExceptionTest() {
+    void loginBadCredentialTest() {
         ResponseEntity<?> response =
             new ResponseEntity<>(new UsernameOrPasswordException().getMessage(), HttpStatus.BAD_REQUEST);
         Mockito.when(authenticationManager.authenticate(
