@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -13,6 +14,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @ToString
+@Builder
 public class RegisterDto {
 
     @Size(min = 5, message = "The username cannot be shortest than 5 characters!")

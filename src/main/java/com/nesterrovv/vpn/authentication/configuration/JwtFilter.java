@@ -1,6 +1,6 @@
 package com.nesterrovv.vpn.authentication.configuration;
 
-import com.nesterrovv.vpn.authentication.service.JwtService;
+import com.nesterrovv.vpn.authentication.utils.JwtTokensUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
@@ -21,7 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
+    private final JwtTokensUtil jwtTokensUtil;
 
     @SuppressWarnings("MagicNumber")
     @Override
@@ -38,7 +38,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
             try {
-                username = jwtService.getUsername(jwt);
+                username = jwtTokensUtil.getUsername(jwt);
             } catch (ExpiredJwtException e) {
 //                log.error("Jwt token was expired");  //TODO add slf4j
             } catch (MalformedJwtException e) {
@@ -50,7 +50,7 @@ public class JwtFilter extends OncePerRequestFilter {
             var token = new UsernamePasswordAuthenticationToken(
                 username,
                 null,
-                jwtService.getRoles(jwt).stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())
+                jwtTokensUtil.getRoles(jwt).stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())
             );
             SecurityContextHolder.getContext().setAuthentication(token);
         }

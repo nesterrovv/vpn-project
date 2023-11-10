@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.userdetails.UserDetails;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -21,6 +22,9 @@ class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    private static final User USER =
+        User.builder().id(1).username("username").password("password").email("username@mail.ru").role(Role.USER).build();
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -30,7 +34,7 @@ class UserServiceTest {
     @Test
     void listAllTest() {
         List<User> list = new LinkedList<>();
-        list.add(new User(1, "first", "ras", "first@mail.ru", Role.USER));
+        list.add(USER);
         list.add(new User(2, "second", "dva", "second@mail.ru", Role.USER));
         Mockito.when(userRepository.findAll()).thenReturn(list);
         List<User> result = userService.listAll();
@@ -41,18 +45,35 @@ class UserServiceTest {
 
     @Test
     void findByUsernameTest() {
-        User user = new User(1, "first", "ras", "first@mail.ru", Role.USER);
-        Mockito.when(userRepository.findByUsername("first")).thenReturn(user);
-        Optional<User> result = Optional.ofNullable(userService.findByUsername("first"));
+        User user = USER;
+        Mockito.when(userRepository.findByUsername(user.getUsername())).thenReturn(user);
+        Optional<User> result = Optional.ofNullable(userService.findByUsername(user.getUsername()));
         assertTrue(result.isPresent());
         assertEquals(user, result.get());
     }
 
     @Test
     void createUser() {
-        User user = new User(1, "first", "ras", "first@mail.ru", Role.USER);
+        User user = USER;
         Mockito.when(userRepository.save(user)).thenReturn(user);
         User result = userService.createUser(user);
+        assertEquals(user, result);
+    }
+
+    @Test
+    void findByEmailTest() {
+        User user = USER;
+        Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
+        Optional<User> result = Optional.ofNullable(userService.findByEmail(user.getEmail()));
+        assertTrue(result.isPresent());
+        assertEquals(user, result.get());
+    }
+
+    @Test
+    void loadUserByUsernameTest() {
+        User user = USER;
+        Mockito.when(userService.loadUserByUsername(user.getUsername())).thenReturn(user);
+        UserDetails result = userService.loadUserByUsername(user.getUsername());
         assertEquals(user, result);
     }
 

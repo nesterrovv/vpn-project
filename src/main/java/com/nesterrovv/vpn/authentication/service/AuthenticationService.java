@@ -8,6 +8,7 @@ import com.nesterrovv.vpn.authentication.exception.EmailAlreadyExistsException;
 import com.nesterrovv.vpn.authentication.exception.UsernameAlreadyExistsException;
 import com.nesterrovv.vpn.authentication.exception.UsernameOrPasswordException;
 import com.nesterrovv.vpn.authentication.mapper.UserCreateMapper;
+import com.nesterrovv.vpn.authentication.utils.JwtTokensUtil;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class AuthenticationService {
     private final UserService userService;
     private final UserCreateMapper userCreateMapper;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
+    private final JwtTokensUtil jwtTokensUtil;
 
     public ResponseEntity<?> register(RegisterDto dto) {
         User user = userCreateMapper.dtoToEntity(dto);
@@ -54,7 +55,7 @@ public class AuthenticationService {
             return new ResponseEntity<>(new UsernameOrPasswordException().getMessage(), HttpStatus.BAD_REQUEST);
         }
         User user = userService.findByUsername(dto.getUsername());
-        JwtToken jwtToken = new JwtToken(jwtService.generateToken(user));
+        JwtToken jwtToken = new JwtToken(jwtTokensUtil.generateToken(user));
         return ResponseEntity.ok(jwtToken);
     }
 
