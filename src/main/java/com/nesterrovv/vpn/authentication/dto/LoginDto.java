@@ -14,9 +14,9 @@ import lombok.ToString;
 @Builder
 public class LoginDto {
 
-    @Size(min = 5, message = "the username cannot be shortest than 5 characters!")
-    @Size(max = 32, message = "the username cannot be longer than 32 characters!")
-    @Pattern(regexp = "^[a-zA-Z]+$", message = "username can contain only letters!")
+    @Size(min = 5, message = "The username cannot be shortest than 5 characters!")
+    @Size(max = 32, message = "The username cannot be longer than 32 characters!")
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "The username can contain only letters!")
     private String username;
 
     @NotBlank(message = "The password cannot be empty!")

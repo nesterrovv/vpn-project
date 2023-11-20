@@ -12,7 +12,6 @@ import com.nesterrovv.vpn.authentication.utils.JwtTokensUtil;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -34,10 +33,10 @@ public class AuthenticationService {
     public ResponseEntity<?> register(RegisterDto dto) {
         User user = userCreateMapper.dtoToEntity(dto);
         if (Optional.ofNullable(userService.findByUsername(user.getUsername())).isPresent()) {
-            return new ResponseEntity<>(new UsernameAlreadyExistsException().getMessage(), HttpStatus.BAD_REQUEST);
+            throw new UsernameAlreadyExistsException();
         }
         if (Optional.ofNullable(userService.findByEmail(user.getEmail())).isPresent()) {
-            return new ResponseEntity<>(new EmailAlreadyExistsException().getMessage(), HttpStatus.BAD_REQUEST);
+            throw new EmailAlreadyExistsException();
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User createdUser = userService.createUser(user);
@@ -52,7 +51,7 @@ public class AuthenticationService {
                     dto.getPassword()
                 ));
         } catch (BadCredentialsException e) {
-            return new ResponseEntity<>(new UsernameOrPasswordException().getMessage(), HttpStatus.BAD_REQUEST);
+            throw new UsernameOrPasswordException();
         }
         User user = userService.findByUsername(dto.getUsername());
         JwtToken jwtToken = new JwtToken(jwtTokensUtil.generateToken(user));

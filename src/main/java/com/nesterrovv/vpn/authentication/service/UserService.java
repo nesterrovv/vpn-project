@@ -1,13 +1,14 @@
 package com.nesterrovv.vpn.authentication.service;
 
 import com.nesterrovv.vpn.authentication.entity.User;
+import com.nesterrovv.vpn.authentication.exception.UsernameOrPasswordException;
 import com.nesterrovv.vpn.authentication.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,7 +35,11 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return findByUsername(username);
+    public UserDetails loadUserByUsername(String username) {
+        Optional<User> user = Optional.ofNullable(findByUsername(username));
+        if (user.isEmpty()) {
+            throw new UsernameOrPasswordException();
+        }
+        return user.get();
     }
 }
