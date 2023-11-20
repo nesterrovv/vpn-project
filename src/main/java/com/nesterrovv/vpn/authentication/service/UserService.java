@@ -2,6 +2,7 @@ package com.nesterrovv.vpn.authentication.service;
 
 import com.nesterrovv.vpn.authentication.entity.User;
 import com.nesterrovv.vpn.authentication.exception.UsernameOrPasswordException;
+import com.nesterrovv.vpn.authentication.mapper.UserDtoMapper;
 import com.nesterrovv.vpn.authentication.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final UserDtoMapper userDtoMapper;
 
     public User createUser(User user) {
         return userRepository.save(user);

@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserCreateMapper {
+public class UserDtoMapper {
 
-    public User dtoToEntity(RegisterDto dto) {
+    public User registerDtoToEntity(RegisterDto dto) {
         return User.builder()
             .username(dto.getUsername())
             .password(dto.getPassword())

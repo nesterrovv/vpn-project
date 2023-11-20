@@ -6,7 +6,7 @@ import com.nesterrovv.vpn.authentication.entity.User;
 import com.nesterrovv.vpn.authentication.exception.EmailAlreadyExistsException;
 import com.nesterrovv.vpn.authentication.exception.UsernameAlreadyExistsException;
 import com.nesterrovv.vpn.authentication.exception.UsernameOrPasswordException;
-import com.nesterrovv.vpn.authentication.mapper.UserCreateMapper;
+import com.nesterrovv.vpn.authentication.mapper.UserDtoMapper;
 import com.nesterrovv.vpn.authentication.utils.JwtTokensUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ class AuthenticationServiceTest {
     @Mock
     private AuthenticationManager authenticationManager;
     @Mock
-    private UserCreateMapper userCreateMapper;
+    private UserDtoMapper userDtoMapper;
     @Mock
     private PasswordEncoder passwordEncoder;
     @Mock
@@ -50,7 +50,7 @@ class AuthenticationServiceTest {
             new AuthenticationService(
                 authenticationManager,
                 userService,
-                userCreateMapper,
+                userDtoMapper,
                 passwordEncoder,
                 jwtTokensUtil
             );
@@ -59,7 +59,7 @@ class AuthenticationServiceTest {
     @Test
     void registerSuccessTest() {
         ResponseEntity<?> response = ResponseEntity.ok(REGISTER_DTO.getUsername());
-        Mockito.when(userCreateMapper.dtoToEntity(REGISTER_DTO)).thenReturn(USER);
+        Mockito.when(userDtoMapper.registerDtoToEntity(REGISTER_DTO)).thenReturn(USER);
         Mockito.when(userService.createUser(USER)).thenReturn(USER);
         ResponseEntity<?> result = authenticationService.register(REGISTER_DTO);
         assertEquals(response, result);
@@ -69,7 +69,7 @@ class AuthenticationServiceTest {
     void registerUsernameExistsTest() {
         ResponseEntity<?> response =
             new ResponseEntity<>(new UsernameAlreadyExistsException().getMessage(), HttpStatus.BAD_REQUEST);
-        Mockito.when(userCreateMapper.dtoToEntity(REGISTER_DTO)).thenReturn(USER);
+        Mockito.when(userDtoMapper.registerDtoToEntity(REGISTER_DTO)).thenReturn(USER);
         Mockito.when(userService.findByUsername(REGISTER_DTO.getUsername())).thenReturn(USER);
         ResponseEntity<?> result = authenticationService.register(REGISTER_DTO);
         assertEquals(response, result);
@@ -79,7 +79,7 @@ class AuthenticationServiceTest {
     void registerEmailExistsTest() {
         ResponseEntity<?> response =
             new ResponseEntity<>(new EmailAlreadyExistsException().getMessage(), HttpStatus.BAD_REQUEST);
-        Mockito.when(userCreateMapper.dtoToEntity(REGISTER_DTO)).thenReturn(USER);
+        Mockito.when(userDtoMapper.registerDtoToEntity(REGISTER_DTO)).thenReturn(USER);
         Mockito.when(userService.findByEmail(REGISTER_DTO.getEmail())).thenReturn(USER);
         ResponseEntity<?> result = authenticationService.register(REGISTER_DTO);
         assertEquals(response, result);

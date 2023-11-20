@@ -7,20 +7,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class UserCreateMapperTest {
+public class UserDtoMapperTest {
 
-    private UserCreateMapper mapper;
+    private UserDtoMapper mapper;
 
     @BeforeEach
     void setUp() {
-        mapper = new UserCreateMapper();
+        mapper = new UserDtoMapper();
     }
 
     @Test
     void dtoToEntityTest() {
         RegisterDto dto = new RegisterDto("test", "new", "test@mail.ru");
         User expected = new User("test", "new", "test@mail.ru", Role.USER);
-        User result = mapper.dtoToEntity(dto);
+        User result = mapper.registerDtoToEntity(dto);
         assertEquals(expected, result);
     }
 
