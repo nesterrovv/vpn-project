@@ -42,7 +42,8 @@ public class AuthenticationService {
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User createdUser = userService.createUser(user);
-        return ResponseEntity.ok(createdUser.getUsername());
+        UserResponseDto createdDto = userDtoMapper.entityToResponseDto(createdUser);
+        return new ResponseEntity<>(createdDto, HttpStatus.CREATED);
     }
 
     public ResponseEntity<?> login(LoginDto dto) {

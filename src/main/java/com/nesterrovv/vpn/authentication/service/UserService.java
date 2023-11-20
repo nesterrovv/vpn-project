@@ -1,10 +1,12 @@
 package com.nesterrovv.vpn.authentication.service;
 
+import com.nesterrovv.vpn.authentication.dto.UserResponseDto;
 import com.nesterrovv.vpn.authentication.entity.User;
 import com.nesterrovv.vpn.authentication.exception.UsernameOrPasswordException;
 import com.nesterrovv.vpn.authentication.mapper.UserDtoMapper;
 import com.nesterrovv.vpn.authentication.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +26,13 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    public List<User> listAll() {
-        return userRepository.findAll();
+    public List<UserResponseDto> listAll(Integer offset, Integer limit) {
+        Page<User> userList = userRepository.findAll(PageRequest.of(offset, limit));
+        List<UserResponseDto> responseList = new LinkedList<>();
+        for (User user : userList) {
+            responseList.add(userDtoMapper.entityToResponseDto(user));
+        }
+        return responseList;
     }
 
     public User findByUsername(String username) {
