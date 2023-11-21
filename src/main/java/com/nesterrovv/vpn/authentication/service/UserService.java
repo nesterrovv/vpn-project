@@ -1,7 +1,11 @@
 package com.nesterrovv.vpn.authentication.service;
 
+import com.nesterrovv.vpn.authentication.dto.UpdateUserRoleDto;
 import com.nesterrovv.vpn.authentication.dto.UserResponseDto;
 import com.nesterrovv.vpn.authentication.entity.User;
+import com.nesterrovv.vpn.authentication.exception.EmailAlreadyExistsException;
+import com.nesterrovv.vpn.authentication.exception.UserNotFoundException;
+import com.nesterrovv.vpn.authentication.exception.UsernameAlreadyExistsException;
 import com.nesterrovv.vpn.authentication.exception.UsernameOrPasswordException;
 import com.nesterrovv.vpn.authentication.mapper.UserDtoMapper;
 import com.nesterrovv.vpn.authentication.repository.UserRepository;
@@ -25,6 +29,21 @@ public class UserService implements UserDetailsService {
     private final UserDtoMapper userDtoMapper;
 
     public User createUser(User user) {
+        if (Optional.ofNullable(findByUsername(user.getUsername())).isPresent()) {
+            throw new UsernameAlreadyExistsException();
+        }
+        if (Optional.ofNullable(findByEmail(user.getEmail())).isPresent()) {
+            throw new EmailAlreadyExistsException();
+        }
+        return userRepository.save(user);
+    }
+
+    public User updateRole(UpdateUserRoleDto updateUserRoleDto) {
+        User user = findByUsername(updateUserRoleDto.getUsername());
+        if (Optional.ofNullable(user).isEmpty()) {
+            throw new UserNotFoundException();
+        }
+        user.setRole(updateUserRoleDto.getRole());
         return userRepository.save(user);
     }
 
@@ -43,6 +62,14 @@ public class UserService implements UserDetailsService {
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public void deleteUser(String username) {
+        User user = findByUsername(username);
+        if (Optional.ofNullable(user).isEmpty()) {
+            throw new UserNotFoundException();
+        }
+        userRepository.delete(user);
     }
 
     @Override

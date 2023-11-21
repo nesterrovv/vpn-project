@@ -1,9 +1,9 @@
 package com.nesterrovv.vpn.authentication.service;
 
-import com.nesterrovv.vpn.authentication.dto.UserResponseDto;
 import com.nesterrovv.vpn.authentication.dto.JwtToken;
 import com.nesterrovv.vpn.authentication.dto.LoginDto;
 import com.nesterrovv.vpn.authentication.dto.RegisterDto;
+import com.nesterrovv.vpn.authentication.dto.UserResponseDto;
 import com.nesterrovv.vpn.authentication.entity.User;
 import com.nesterrovv.vpn.authentication.exception.EmailAlreadyExistsException;
 import com.nesterrovv.vpn.authentication.exception.UsernameAlreadyExistsException;
@@ -13,8 +13,6 @@ import com.nesterrovv.vpn.authentication.utils.JwtTokensUtil;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,7 +30,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokensUtil jwtTokensUtil;
 
-    public ResponseEntity<?> register(RegisterDto dto) {
+    public UserResponseDto register(RegisterDto dto) {
         User user = userDtoMapper.registerDtoToEntity(dto);
         if (Optional.ofNullable(userService.findByUsername(user.getUsername())).isPresent()) {
             throw new UsernameAlreadyExistsException();
@@ -42,11 +40,10 @@ public class AuthenticationService {
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User createdUser = userService.createUser(user);
-        UserResponseDto createdDto = userDtoMapper.entityToResponseDto(createdUser);
-        return new ResponseEntity<>(createdDto, HttpStatus.CREATED);
+        return userDtoMapper.entityToResponseDto(createdUser);
     }
 
-    public ResponseEntity<?> login(LoginDto dto) {
+    public JwtToken login(LoginDto dto) {
         try {
             authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -57,8 +54,7 @@ public class AuthenticationService {
             throw new UsernameOrPasswordException();
         }
         User user = userService.findByUsername(dto.getUsername());
-        JwtToken jwtToken = new JwtToken(jwtTokensUtil.generateToken(user));
-        return ResponseEntity.ok(jwtToken);
+        return new JwtToken(jwtTokensUtil.generateToken(user));
     }
 
 }
