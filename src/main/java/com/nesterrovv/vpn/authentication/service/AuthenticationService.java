@@ -5,13 +5,10 @@ import com.nesterrovv.vpn.authentication.dto.LoginDto;
 import com.nesterrovv.vpn.authentication.dto.RegisterDto;
 import com.nesterrovv.vpn.authentication.dto.UserResponseDto;
 import com.nesterrovv.vpn.authentication.entity.User;
-import com.nesterrovv.vpn.authentication.exception.EmailAlreadyExistsException;
-import com.nesterrovv.vpn.authentication.exception.UsernameAlreadyExistsException;
 import com.nesterrovv.vpn.authentication.exception.UsernameOrPasswordException;
 import com.nesterrovv.vpn.authentication.mapper.UserDtoMapper;
 import com.nesterrovv.vpn.authentication.utils.JwtTokensUtil;
 import jakarta.transaction.Transactional;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,15 +29,8 @@ public class AuthenticationService {
 
     public UserResponseDto register(RegisterDto dto) {
         User user = userDtoMapper.registerDtoToEntity(dto);
-        if (Optional.ofNullable(userService.findByUsername(user.getUsername())).isPresent()) {
-            throw new UsernameAlreadyExistsException();
-        }
-        if (Optional.ofNullable(userService.findByEmail(user.getEmail())).isPresent()) {
-            throw new EmailAlreadyExistsException();
-        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User createdUser = userService.createUser(user);
-        return userDtoMapper.entityToResponseDto(createdUser);
+        return userService.createUser(user);
     }
 
     public JwtToken login(LoginDto dto) {

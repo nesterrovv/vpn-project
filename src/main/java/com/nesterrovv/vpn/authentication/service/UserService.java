@@ -28,23 +28,23 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final UserDtoMapper userDtoMapper;
 
-    public User createUser(User user) {
+    public UserResponseDto createUser(User user) {
         if (Optional.ofNullable(findByUsername(user.getUsername())).isPresent()) {
             throw new UsernameAlreadyExistsException();
         }
         if (Optional.ofNullable(findByEmail(user.getEmail())).isPresent()) {
             throw new EmailAlreadyExistsException();
         }
-        return userRepository.save(user);
+        return userDtoMapper.entityToResponseDto(userRepository.save(user));
     }
 
-    public User updateRole(UpdateUserRoleDto updateUserRoleDto) {
+    public UserResponseDto updateRole(UpdateUserRoleDto updateUserRoleDto) {
         User user = findByUsername(updateUserRoleDto.getUsername());
         if (Optional.ofNullable(user).isEmpty()) {
             throw new UserNotFoundException();
         }
         user.setRole(updateUserRoleDto.getRole());
-        return userRepository.save(user);
+        return userDtoMapper.entityToResponseDto(userRepository.save(user));
     }
 
     public List<UserResponseDto> listAll(Integer offset, Integer limit) {

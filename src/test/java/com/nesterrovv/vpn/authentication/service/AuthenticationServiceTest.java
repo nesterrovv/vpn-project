@@ -1,10 +1,10 @@
 package com.nesterrovv.vpn.authentication.service;
 
+import com.nesterrovv.vpn.authentication.dto.JwtToken;
 import com.nesterrovv.vpn.authentication.dto.LoginDto;
 import com.nesterrovv.vpn.authentication.dto.RegisterDto;
+import com.nesterrovv.vpn.authentication.dto.UserResponseDto;
 import com.nesterrovv.vpn.authentication.entity.User;
-import com.nesterrovv.vpn.authentication.exception.EmailAlreadyExistsException;
-import com.nesterrovv.vpn.authentication.exception.UsernameAlreadyExistsException;
 import com.nesterrovv.vpn.authentication.exception.UsernameOrPasswordException;
 import com.nesterrovv.vpn.authentication.mapper.UserDtoMapper;
 import com.nesterrovv.vpn.authentication.utils.JwtTokensUtil;
@@ -13,13 +13,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AuthenticationServiceTest {
 
@@ -58,52 +58,38 @@ class AuthenticationServiceTest {
 
     @Test
     void registerSuccessTest() {
-        ResponseEntity<?> response = ResponseEntity.ok(REGISTER_DTO.getUsername());
+        UserResponseDto expected = UserResponseDto.builder()
+            .id(USER.getId())
+            .username(USER.getUsername())
+            .email(USER.getEmail())
+            .role(USER.getRole())
+            .build();
         Mockito.when(userDtoMapper.registerDtoToEntity(REGISTER_DTO)).thenReturn(USER);
-        Mockito.when(userService.createUser(USER)).thenReturn(USER);
-        ResponseEntity<?> result = authenticationService.register(REGISTER_DTO);
-        assertEquals(response, result);
-    }
-
-    @Test
-    void registerUsernameExistsTest() {
-        ResponseEntity<?> response =
-            new ResponseEntity<>(new UsernameAlreadyExistsException().getMessage(), HttpStatus.BAD_REQUEST);
-        Mockito.when(userDtoMapper.registerDtoToEntity(REGISTER_DTO)).thenReturn(USER);
-        Mockito.when(userService.findByUsername(REGISTER_DTO.getUsername())).thenReturn(USER);
-        ResponseEntity<?> result = authenticationService.register(REGISTER_DTO);
-        assertEquals(response, result);
-    }
-
-    @Test
-    void registerEmailExistsTest() {
-        ResponseEntity<?> response =
-            new ResponseEntity<>(new EmailAlreadyExistsException().getMessage(), HttpStatus.BAD_REQUEST);
-        Mockito.when(userDtoMapper.registerDtoToEntity(REGISTER_DTO)).thenReturn(USER);
-        Mockito.when(userService.findByEmail(REGISTER_DTO.getEmail())).thenReturn(USER);
-        ResponseEntity<?> result = authenticationService.register(REGISTER_DTO);
-        assertEquals(response, result);
+        Mockito.when(passwordEncoder.encode(USER.getPassword())).thenReturn(USER.getPassword());
+        Mockito.when(userService.createUser(USER)).thenReturn(expected);
+        Mockito.when(userDtoMapper.entityToResponseDto(USER)).thenReturn(expected);
+        UserResponseDto result = authenticationService.register(REGISTER_DTO);
+        assertEquals(expected, result);
     }
 
     @Test
     void loginSuccessTest() {
-        ResponseEntity<?> response = ResponseEntity.ok("TOKEN_BY_USERNAME");
+        JwtToken expected = new JwtToken("All right!");
         Mockito.when(userService.findByUsername(LOGIN_DTO.getUsername())).thenReturn(USER);
-        ResponseEntity<?> result = authenticationService.login(LOGIN_DTO);
-        assertEquals(response.getStatusCode(), result.getStatusCode());
+        Mockito.when(jwtTokensUtil.generateToken(USER)).thenReturn(expected.getToken());
+        JwtToken result = authenticationService.login(LOGIN_DTO);
+        assertEquals(expected, result);
     }
 
     @Test
     void loginBadCredentialTest() {
-        ResponseEntity<?> response =
-            new ResponseEntity<>(new UsernameOrPasswordException().getMessage(), HttpStatus.BAD_REQUEST);
         Mockito.when(authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 LOGIN_DTO.getUsername(),
                 LOGIN_DTO.getPassword()
             ))).thenThrow(BadCredentialsException.class);
-        ResponseEntity<?> result = authenticationService.login(LOGIN_DTO);
-        assertEquals(response, result);
+        Throwable thrown = assertThrows(UsernameOrPasswordException.class, () -> authenticationService.login(LOGIN_DTO));
+        assertNotNull(thrown.getMessage());
     }
 
 }
