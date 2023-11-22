@@ -1,7 +1,7 @@
 package com.nesterrovv.vpn.authentication.mapper;
 
-import com.nesterrovv.vpn.authentication.dto.UserResponseDto;
 import com.nesterrovv.vpn.authentication.dto.RegisterDto;
+import com.nesterrovv.vpn.authentication.dto.UserResponseDto;
 import com.nesterrovv.vpn.authentication.entity.Role;
 import com.nesterrovv.vpn.authentication.entity.User;
 import lombok.RequiredArgsConstructor;

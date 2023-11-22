@@ -38,7 +38,6 @@ public class AdminController {
 
     @DeleteMapping("/delete_user")
     public ResponseEntity<?> deleteUser(@RequestBody String username) {
-        System.out.println(username);
         return ResponseEntity.ok(adminService.deleteUser(username));
     }
 

@@ -1,13 +1,13 @@
 package com.nesterrovv.vpn.authentication.exception;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import java.util.Objects;
 
 @ControllerAdvice
 @Slf4j
@@ -30,7 +30,10 @@ public class AppExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
-        return new ResponseEntity<>(Objects.requireNonNull(exception.getFieldError()).getDefaultMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+        return new ResponseEntity<>(
+            Objects.requireNonNull(exception.getFieldError()).getDefaultMessage(),
+            HttpStatus.UNPROCESSABLE_ENTITY
+        );
     }
 
     @ExceptionHandler(ExpiredJwtException.class)

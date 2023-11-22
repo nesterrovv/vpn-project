@@ -13,11 +13,11 @@ class TokenTest {
     @BeforeEach
     void setUp() {
         token1 = new Token();
-        token1.setId(1L);
+        token1.setId(1);
         token1.setToken("token1");
 
         token2 = new Token();
-        token2.setId(2L);
+        token2.setId(2);
         token2.setToken("token2");
     }
 
@@ -25,7 +25,7 @@ class TokenTest {
     void testEquals() {
         // Arrange
         Token sameToken = new Token();
-        sameToken.setId(1L);
+        sameToken.setId(1);
         sameToken.setToken("token1");
         // Act
         boolean result1 = token1.equals(token2);
@@ -39,7 +39,7 @@ class TokenTest {
      void testHashCode() {
         // Arrange
         Token sameToken = new Token();
-        sameToken.setId(1L);
+        sameToken.setId(1);
         sameToken.setToken("token1");
         // Act
         int hashCode1 = token1.hashCode();
