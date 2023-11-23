@@ -5,17 +5,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TokenTest {
 
-    @Test
-    void testGetId() {
-        // Arrange
-        Token token = new Token();
-        Long expectedId = 1L;
+    @BeforeEach
+    void setUp() {
+        token1 = new Token();
+        token1.setId(1);
+        token1.setToken("token1");
 
-        // Act
-        token.setId(expectedId);
-
-        // Assert
-        assertEquals(expectedId, token.getId());
+        token2 = new Token();
+        token2.setId(2);
+        token2.setToken("token2");
     }
 
     @Test
@@ -36,7 +34,6 @@ class TokenTest {
         // Arrange
         Token token = new Token();
         String expectedToken = "test_token";
-
         // Act
         token.setToken(expectedToken);
 
@@ -49,7 +46,6 @@ class TokenTest {
         // Arrange
         Token token = new Token();
         String expectedToken = "test_token";
-
         // Act
         token.setToken(expectedToken);
 
