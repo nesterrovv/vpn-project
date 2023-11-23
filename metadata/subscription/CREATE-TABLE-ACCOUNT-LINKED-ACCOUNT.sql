@@ -1,5 +1,5 @@
 CREATE TABLE subscription.account_linked_account (
-     id SERIAL PRIMARY KEY,
+     id BIGSERIAL PRIMARY KEY,
      main_account_id BIGINT,
      linked_account_id BIGINT,
      FOREIGN KEY (main_account_id) REFERENCES subscription.account (id),

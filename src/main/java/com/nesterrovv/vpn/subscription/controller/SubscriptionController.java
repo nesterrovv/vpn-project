@@ -82,7 +82,7 @@ public class SubscriptionController {
         Token oldToken = current.getToken();
         if (oldToken != null) {
             List<Subscription> subscriptionsWithThisToken =
-                subscriptionService.getSubscriptionsByLinkedTokenId(oldToken.getId());
+                subscriptionService.getSubscriptionsByLinkedTokenId((long) oldToken.getId());
             if (!subscriptionsWithThisToken.isEmpty()) {
                 subscriptionService.updateSubscription(id, expirationDate, false, null);
                 tokenService.delete(oldToken.getId());
