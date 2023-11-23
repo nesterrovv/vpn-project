@@ -27,7 +27,6 @@ public class Subscription {
     public Subscription() {}
 
     public Subscription(Date expirationDate, boolean isActive, Token token) {
-        this.id = id;
         this.expirationDate = expirationDate;
         this.isActive = isActive;
         this.token = token;
@@ -67,8 +66,12 @@ public class Subscription {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Subscription that = (Subscription) o;
         return isActive == that.isActive
             && Objects.equals(id, that.id)

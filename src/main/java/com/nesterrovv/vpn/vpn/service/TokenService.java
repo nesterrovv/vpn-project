@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class TokenService {
     private final TokenRepository repository;
+    private ProcessBuilder processBuilder;
 
     @Autowired
     public TokenService(TokenRepository tokenRepository) {
         this.repository = tokenRepository;
+    }
+
+    public TokenService(TokenRepository tokenRepository, ProcessBuilder processBuilder) {
+        this.repository = tokenRepository;
+        this.processBuilder = processBuilder;
     }
 
     public Token generateToken() {
@@ -29,12 +36,13 @@ public class TokenService {
         return save(token);
     }
 
+    @SuppressWarnings("HiddenField")
     private String generateTokenValue() {
         try {
             String url = System.getenv("OUTLINE_API_URL");
             String postfix = System.getenv("POSTFIX");
             String curlCommand = "curl --insecure -X POST " + url + postfix;
-            var processBuilder = new ProcessBuilder(curlCommand.split(" "));
+            ProcessBuilder processBuilder = new ProcessBuilder(curlCommand.split(" "));
             processBuilder.redirectErrorStream(true);
             var process = processBuilder.start();
             var reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -71,8 +79,8 @@ public class TokenService {
         return repository.save(token);
     }
 
-    public Token findById(Long id) {
-        return repository.findById(id).orElse(null);
+    public Optional<Token> findById(Long id) {
+        return repository.findById(id);
     }
 
     public void delete(Long id) {

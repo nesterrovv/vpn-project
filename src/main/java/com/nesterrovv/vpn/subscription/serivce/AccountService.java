@@ -2,13 +2,12 @@ package com.nesterrovv.vpn.subscription.serivce;
 
 import com.nesterrovv.vpn.subscription.entity.Account;
 import com.nesterrovv.vpn.subscription.repository.AccountRepository;
-import com.nesterrovv.vpn.vpn.entity.Token;
-import com.nesterrovv.vpn.vpn.repository.TokenRepository;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 
 @Service
 public class AccountService {
@@ -32,6 +31,11 @@ public class AccountService {
     public String addLinkedAccount(Long id, Account linkedAccount) {
         Account account = this.findById(id);
         if (account != null) {
+            // Initialize linkedAccounts if it's null
+            if (account.getLinkedAccounts() == null) {
+                account.setLinkedAccounts(new HashSet<>());
+            }
+
             prepareLinkedAccount(linkedAccount);
             Set<Account> linkedAccounts = account.getLinkedAccounts();
             linkedAccounts.add(linkedAccount);
@@ -47,13 +51,16 @@ public class AccountService {
         Account account = this.findById(id);
         if (account != null) {
             Set<Account> linkedAccounts = account.getLinkedAccounts();
-            for (Account linked : linkedAccounts) {
-                System.out.println("linked: " + linked);
-                if (linked.getUsername().equals(linkedAccount.getUsername())) {
-                    linkedAccounts.remove(linked);
-                    save(account);
-                    save(linkedAccount);
-                    return "Account removed from linked.";
+            if (linkedAccounts != null) { // Add null check here
+                Iterator<Account> iterator = linkedAccounts.iterator();
+                while (iterator.hasNext()) {
+                    Account linked = iterator.next();
+                    if (linked.getUsername().equals(linkedAccount.getUsername())) {
+                        iterator.remove();
+                        save(account);
+                        save(linkedAccount);
+                        return "Account removed from linked.";
+                    }
                 }
             }
             return "This account is not linked with given. Nothing removed.";

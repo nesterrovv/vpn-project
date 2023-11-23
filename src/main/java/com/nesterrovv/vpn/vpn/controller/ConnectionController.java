@@ -5,6 +5,7 @@ import com.nesterrovv.vpn.vpn.entity.Token;
 import com.nesterrovv.vpn.vpn.service.TokenService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,8 +21,11 @@ public class ConnectionController {
     private final TokenService tokenService;
 
     @GetMapping("/get/{id}")
-    public Optional<Token> findTokenById(@PathVariable Long id) {
-        return Optional.ofNullable(tokenService.findById(id));
+    public ResponseEntity<TokenDto> findTokenById(@PathVariable Long id) {
+        Optional<Token> tokenOptional = tokenService.findById(id);
+        return tokenOptional
+            .map(token -> ResponseEntity.ok(new TokenDto(token.getToken())))
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/generate")
