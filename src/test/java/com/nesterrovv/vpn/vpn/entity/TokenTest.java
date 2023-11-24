@@ -2,7 +2,6 @@ package com.nesterrovv.vpn.vpn.entity;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class TokenTest {
@@ -13,40 +12,89 @@ class TokenTest {
     @BeforeEach
     void setUp() {
         token1 = new Token();
-        token1.setId(1);
+        token1.setId(1L);
         token1.setToken("token1");
 
         token2 = new Token();
-        token2.setId(2);
+        token2.setId(2L);
         token2.setToken("token2");
+    }
+
+    @Test
+    void testSetId() {
+        // Arrange
+        Token token = new Token();
+        Long expectedId = 1L;
+
+        // Act
+        token.setId(expectedId);
+
+        // Assert
+        assertEquals(expectedId, token.getId());
+    }
+
+    @Test
+    void testGetToken() {
+        // Arrange
+        Token token = new Token();
+        String expectedToken = "test_token";
+        // Act
+        token.setToken(expectedToken);
+
+        // Assert
+        assertEquals(expectedToken, token.getToken());
+    }
+
+    @Test
+    void testSetToken() {
+        // Arrange
+        Token token = new Token();
+        String expectedToken = "test_token";
+        // Act
+        token.setToken(expectedToken);
+
+        // Assert
+        assertEquals(expectedToken, token.getToken());
     }
 
     @Test
     void testEquals() {
         // Arrange
-        Token sameToken = new Token();
-        sameToken.setId(1);
-        sameToken.setToken("token1");
-        // Act
-        boolean result1 = token1.equals(token2);
-        boolean result2 = token1.equals(sameToken);
-        // Assert
-        assertFalse(result1);
-        assertTrue(result2);
+        Token token1 = new Token();
+        token1.setId(1L);
+        token1.setToken("test_token");
+
+        Token token2 = new Token();
+        token2.setId(1L);
+        token2.setToken("test_token");
+
+        Token token3 = new Token();
+        token3.setId(2L);
+        token3.setToken("different_token");
+
+        // Act & Assert
+        assertTrue(token1.equals(token2));
+        assertFalse(token1.equals(token3));
     }
 
     @Test
-     void testHashCode() {
+    void testHashCode() {
         // Arrange
-        Token sameToken = new Token();
-        sameToken.setId(1);
-        sameToken.setToken("token1");
-        // Act
-        int hashCode1 = token1.hashCode();
-        int hashCode2 = sameToken.hashCode();
-        // Assert
-        assertNotEquals(hashCode1, token2.hashCode());
-        assertEquals(hashCode1, hashCode2);
+        Token token1 = new Token();
+        token1.setId(1L);
+        token1.setToken("test_token");
+
+        Token token2 = new Token();
+        token2.setId(1L);
+        token2.setToken("test_token");
+
+        Token token3 = new Token();
+        token3.setId(2L);
+        token3.setToken("different_token");
+
+        // Act & Assert
+        assertEquals(token1.hashCode(), token2.hashCode());
+        assertNotEquals(token1.hashCode(), token3.hashCode());
     }
 
 }

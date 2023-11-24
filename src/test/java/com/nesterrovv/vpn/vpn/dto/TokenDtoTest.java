@@ -32,12 +32,32 @@ class TokenDtoTest {
     void testHashCode() {
         // Arrange
         TokenDto sameTokenDto = new TokenDto("token1");
+        TokenDto sameObjectTokenDto = tokenDto1;
+        TokenDto nullToken = null;
         // Act
         int hashCode1 = tokenDto1.hashCode();
         int hashCode2 = sameTokenDto.hashCode();
         // Assert
         assertNotEquals(hashCode1, tokenDto2.hashCode());
         assertEquals(hashCode1, hashCode2);
+        assertEquals(sameObjectTokenDto, tokenDto1);
+        assertNotEquals(nullToken, tokenDto1);
+    }
+
+    @Test
+    void testGetToken() {
+        assertEquals("token1", tokenDto1.getToken());
+    }
+
+    @Test
+    void testSetToken() {
+        // Arrange
+        TokenDto tokenDto = new TokenDto();
+        String expectedToken = "test_token";
+        // Act
+        tokenDto.setToken(expectedToken);
+        // Assert
+        assertEquals(expectedToken, tokenDto.getToken());
     }
 
 }

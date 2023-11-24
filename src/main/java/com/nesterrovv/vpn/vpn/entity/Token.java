@@ -12,12 +12,12 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "token", schema = "public")
+@Table(name = "token", schema = "subscription")
 public class Token {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String token;
 
     @Override
