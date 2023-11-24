@@ -1,18 +1,22 @@
 package com.nesterrovv.vpn.vpn.entity;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TokenTest {
 
+    private Token token1;
+    private Token token2;
+
     @BeforeEach
     void setUp() {
         token1 = new Token();
-        token1.setId(1);
+        token1.setId(1L);
         token1.setToken("token1");
 
         token2 = new Token();
-        token2.setId(2);
+        token2.setId(2L);
         token2.setToken("token2");
     }
 
