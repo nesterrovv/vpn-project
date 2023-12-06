@@ -42,14 +42,19 @@ public class SubscriptionService {
             subscription.setExpirationDate(expirationDate);
             subscription.setActive(isActive);
             subscription.setToken(token);
-            return save(subscription);
+            Subscription savedSubscription = save(subscription);
+            savedSubscription.setId(id); // Set the id explicitly
+            return savedSubscription;
         }
         return null;
     }
 
     public void deleteSubscription(Long id) {
-        this.deactivateSubscription(id);
-        subscriptionRepository.deleteById(id);
+        Optional<Subscription> optionalSubscription = getSubscriptionById(id);
+        if (optionalSubscription.isPresent()) {
+            this.deactivateSubscription(id);
+            subscriptionRepository.deleteById(id);
+        }
     }
 
     public Subscription deactivateSubscription(Long id) {

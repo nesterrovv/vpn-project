@@ -1,61 +1,70 @@
-//package com.nesterrovv.vpn.vpn.service;
-//
-//import com.nesterrovv.vpn.vpn.entity.Token;
-//import com.nesterrovv.vpn.vpn.repository.TokenRepository;
-//import org.junit.jupiter.api.Test;
-//import org.mockito.InjectMocks;
-//import org.mockito.Mock;
-//import org.springframework.boot.test.context.SpringBootTest;
-//
-//import java.util.Optional;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//import static org.mockito.ArgumentMatchers.any;
-//import static org.mockito.Mockito.verify;
-//import static org.mockito.Mockito.when;
-//
-//@SpringBootTest
-//class TokenServiceTest {
-//
-//    @Mock
-//    private TokenRepository tokenRepository;
-//
-//    @InjectMocks
-//    private TokenService tokenService;
-//
-//    @Test
-//    void testGenerateToken() {
-//        when(tokenRepository.save(any(Token.class))).thenReturn(new Token());
-//        String outlineApiUrl = "https://example.com/api";
-//        String postfix = "/generate";
-//        System.setProperty("OUTLINE_API_URL", outlineApiUrl);
-//        System.setProperty("POSTFIX", postfix);
-//        Token generatedToken = tokenService.generateToken();
-//        verify(tokenRepository).save(any(Token.class));
-//        assertNotNull(generatedToken);
-//    }
-//
-//    @Test
-//    void testSave() {
-//        when(tokenRepository.save(any(Token.class))).thenReturn(new Token());
-//        Token token = new Token();
-//        Token savedToken = tokenService.save(token);
-//        verify(tokenRepository).save(any(Token.class));
-//        assertNotNull(savedToken);
-//    }
-//
-//    @Test
-//    void testFindById() {
-//        when(tokenRepository.findById(1L)).thenReturn(Optional.of(new Token()));
-//        Optional<Token> foundToken = tokenService.findById(1L);
-//        verify(tokenRepository).findById(1L);
-//        assertTrue(foundToken.isPresent());
-//    }
-//
-//    @Test
-//    void testDelete() {
-//        tokenService.delete(1L);
-//        verify(tokenRepository).deleteById(1L);
-//    }
-//
-//}
+package com.nesterrovv.vpn.vpn.service;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import com.nesterrovv.vpn.vpn.entity.Token;
+import com.nesterrovv.vpn.vpn.repository.TokenRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import java.util.Optional;
+
+class TokenServiceTest {
+
+    private TokenService tokenService;
+
+    @Mock
+    private TokenRepository tokenRepository;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        tokenService = new TokenService(tokenRepository);
+    }
+
+    @Test
+    void testGenerateToken() {
+        when(tokenRepository.save(any(Token.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        Token generatedToken = tokenService.generateToken();
+        assertNotNull(generatedToken);
+        assertNotNull(generatedToken.getToken());
+        verify(tokenRepository, times(1)).save(any(Token.class));
+    }
+
+    @Test
+    void testSave() {
+        Token tokenToSave = new Token();
+        when(tokenRepository.save(tokenToSave)).thenReturn(tokenToSave);
+
+        Token savedToken = tokenService.save(tokenToSave);
+
+        assertNotNull(savedToken);
+        verify(tokenRepository, times(1)).save(tokenToSave);
+    }
+
+    @Test
+    void testFindById() {
+        Long tokenId = 1L;
+        when(tokenRepository.findById(tokenId)).thenReturn(Optional.of(new Token()));
+
+        Optional<Token> foundToken = tokenService.findById(tokenId);
+
+        assertTrue(foundToken.isPresent());
+        verify(tokenRepository, times(1)).findById(tokenId);
+    }
+
+    @Test
+    void testDelete() {
+        Long tokenId = 1L;
+
+        // Mocking repository deleteById method
+        doNothing().when(tokenRepository).deleteById(tokenId);
+
+        tokenService.delete(tokenId);
+
+        verify(tokenRepository, times(1)).deleteById(tokenId);
+    }
+
+}
