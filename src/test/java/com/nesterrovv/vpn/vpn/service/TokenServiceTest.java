@@ -7,6 +7,7 @@ import com.nesterrovv.vpn.vpn.entity.Token;
 import com.nesterrovv.vpn.vpn.repository.TokenRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import java.util.Optional;

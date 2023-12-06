@@ -16,18 +16,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TokenService {
+
     private final TokenRepository repository;
-    private ProcessBuilder processBuilder;
+
 
     @Autowired
     public TokenService(TokenRepository tokenRepository) {
         this.repository = tokenRepository;
     }
 
-    public TokenService(TokenRepository tokenRepository, ProcessBuilder processBuilder) {
-        this.repository = tokenRepository;
-        this.processBuilder = processBuilder;
-    }
 
     public Token generateToken() {
         String generatedToken = generateTokenValue();
