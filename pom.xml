@@ -215,6 +215,16 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>10.1.0</version>
+                <configuration>
+                    <url>jdbc:postgresql://62.84.99.96:5432/postgres</url>
+                    <user>***</user>
+                    <password>***</password>
+                </configuration>
+            </plugin>
         </plugins>
 
         <pluginManagement>
