@@ -1,3 +1,4 @@
-INSERT INTO subscription.account (username, is_main_account)
-values ('first', false),
-       ('second', false);
+INSERT INTO subscription_account (username, is_main_account)
+VALUES
+    ('first', false),
+    ('second', false);
