@@ -190,6 +190,12 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>1.18.3</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -221,8 +227,8 @@
                 <version>10.1.0</version>
                 <configuration>
                     <url>jdbc:postgresql://62.84.99.96:5432/postgres</url>
-                    <user>***</user>
-                    <password>***</password>
+                    <user>postgres</user>
+                    <password>postgres</password>
                 </configuration>
             </plugin>
         </plugins>

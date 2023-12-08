@@ -12,7 +12,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AdminServiceTest {
+public class AdminServiceUnitTest {
 
     private AdminService adminService;
 
