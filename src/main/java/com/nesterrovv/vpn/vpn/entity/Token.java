@@ -12,7 +12,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "token", schema = "subscription")
+@Table(name = "token", schema = "public")
 public class Token {
 
     @Id

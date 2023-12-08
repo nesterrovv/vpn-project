@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "subscription", schema = "subscription")
+@Table(name = "subscription", schema = "public")
 public class Subscription {
 
     @Id

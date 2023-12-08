@@ -1,29 +1,29 @@
-version: '3'
+version: '3.8'
 services:
-  postgres:
-    image: postgres:latest
-    container_name: postgres-container
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: ***
-      POSTGRES_PASSWORD: ***
-    ports:
-      - "5432:5432"
-
-  spring-app:
+  backend:
+    image: client
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: spring-app-container
     ports:
       - "8080:8080"
     depends_on:
       - postgres
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://62.84.99.96:5432/postgres
+      SERVER_PORT: 8080
+      SPRING_DATASOURCE_URL: jdbc:postgresql://62.84.99.96:5432/vpn
       SPRING_DATASOURCE_USERNAME: ***
       SPRING_DATASOURCE_PASSWORD: ***
       JWT_SECRET: ***
       JWT_LIFETIME: 30m
-      SPRING_FLYWAY_LOCATIONS: classpath:db/migration
-      SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
+
+  postgres:
+    image: postgres
+    container_name: postgres-container
+    environment:
+      POSTGRES_DB: vpn
+      POSTGRES_USER: ***
+      POSTGRES_PASSWORD: ***
+    ports:
+      - "5432:5432"
+

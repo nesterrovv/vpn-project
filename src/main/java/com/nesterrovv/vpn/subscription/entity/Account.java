@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "account", schema = "subscription")
+@Table(name = "account", schema = "public")
 public class Account {
 
     @Id
