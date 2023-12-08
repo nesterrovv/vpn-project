@@ -37,7 +37,7 @@ public class SubscriptionController {
         this.tokenService = tokenService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<Subscription>> getAllSubscriptions() {
         List<Subscription> subscriptions = subscriptionService.getAllSubscriptions();
         return new ResponseEntity<>(subscriptions, HttpStatus.OK);
@@ -50,7 +50,7 @@ public class SubscriptionController {
             .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Subscription> createSubscription(
         @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date expirationDate) {
         Token token = tokenService.generateToken();
