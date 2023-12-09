@@ -36,9 +36,7 @@ public class TokenService {
     @SuppressWarnings("HiddenField")
     private String generateTokenValue() {
         try {
-            String url = System.getenv("OUTLINE_API_URL");
-            String postfix = System.getenv("POSTFIX");
-            String curlCommand = "curl --insecure -X POST " + url + postfix;
+            String curlCommand = "curl --insecure -X POST https://not-your-business/no-free-vpn";
             ProcessBuilder processBuilder = new ProcessBuilder(curlCommand.split(" "));
             processBuilder.redirectErrorStream(true);
             var process = processBuilder.start();

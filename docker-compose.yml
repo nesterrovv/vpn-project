@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  backend:
+    image: client
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      SERVER_PORT: 8080
+      SPRING_DATASOURCE_URL: jdbc:postgresql://62.84.99.96:5432/vpn
+      SPRING_DATASOURCE_USERNAME: ***
+      SPRING_DATASOURCE_PASSWORD: ***
+      JWT_SECRET: ***
+      JWT_LIFETIME: 30m
+
+  postgres:
+    image: postgres
+    container_name: postgres-container
+    environment:
+      POSTGRES_DB: vpn
+      POSTGRES_USER: ***
+      POSTGRES_PASSWORD: ***
+    ports:
+      - "5432:5432"
+

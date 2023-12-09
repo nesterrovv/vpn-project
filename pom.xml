@@ -9,6 +9,12 @@
         <version>3.1.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+    </repositories>
     <groupId>com.nesterrovv</groupId>
     <artifactId>vpn</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -58,7 +64,6 @@
 <!--                <type>pom</type>-->
 <!--                <scope>import</scope>-->
 <!--            </dependency>-->
-
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
@@ -214,6 +219,16 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>10.1.0</version>
+                <configuration>
+                    <url>jdbc:postgresql://62.84.99.96:5432/postgres</url>
+                    <user>postgres</user>
+                    <password>postgres</password>
+                </configuration>
             </plugin>
         </plugins>
 

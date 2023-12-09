@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "account_linked_account", schema = "subscription")
+@Table(name = "account_linked_account", schema = "public")
 public class AccountLinkedAccount {
 
     @Id

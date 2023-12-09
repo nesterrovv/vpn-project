@@ -2,32 +2,37 @@
 //
 //import com.nesterrovv.vpn.vpn.entity.Token;
 //import com.nesterrovv.vpn.vpn.repository.TokenRepository;
-//import java.util.Optional;
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 //import org.springframework.boot.test.context.SpringBootTest;
+//import org.springframework.boot.test.context.TestConfiguration;
+//import org.springframework.boot.test.mock.mockito.MockBean;
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.ComponentScan;
 //import org.springframework.http.MediaType;
 //import org.springframework.test.context.TestPropertySource;
 //import org.springframework.test.context.jdbc.Sql;
 //import org.springframework.test.web.servlet.MockMvc;
 //import org.springframework.test.web.servlet.ResultActions;
 //import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+//
 //import static org.hamcrest.Matchers.matchesPattern;
+//import static org.mockito.Mockito.when;
 //import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 //import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 //import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 //
-//@SpringBootTest
 //@AutoConfigureMockMvc
 //@TestPropertySource(locations = "classpath:application.properties")
+//@ComponentScan(basePackages = {"com.nesterrovv.vpn"})
 //public class ConnectionControllerIntegrationTest {
 //
 //    @Autowired
 //    private MockMvc mockMvc;
 //
-//    @Autowired
+//    @MockBean
 //    private TokenRepository tokenRepository;
 //
 //    @BeforeEach
@@ -36,11 +41,11 @@
 //        Token tokenForSave = new Token();
 //        tokenForSave.setId(1L);
 //        tokenForSave.setToken("test_token");
-//        tokenRepository.save(tokenForSave);
 //
-//        Optional<Token> foundToken = tokenRepository.findById(1L);
-//        System.out.println("Token added to the database: " + foundToken);
+//        // Мокируем поведение метода findById в репозитории
+//        when(tokenRepository.findById(1L)).thenReturn(java.util.Optional.of(tokenForSave));
 //    }
+//
 //    @Test
 //    public void testFindTokenById() throws Exception {
 //        ResultActions result = mockMvc.perform(MockMvcRequestBuilders
